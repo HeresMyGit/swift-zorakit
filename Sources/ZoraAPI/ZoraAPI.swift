@@ -49,7 +49,7 @@ public class ZoraAPI {
   
   
   public func tokens(query: TokensQueryInput?, page: PaginationInput = .init(limit: 10)) async throws -> (PageInfo, [NFT]?) {
-    let gqlQuery = TokensQuery(networks: [network], where: query, pagination: page, sort: .init(sortKey: .minted, sortDirection: .asc), includeFullDetails: true, includeSalesHistory: false)
+    let gqlQuery = TokensQuery(networks: [network], where: query, pagination: page, sort: .init(sortKey: .minted, sortDirection: .desc), includeFullDetails: true, includeSalesHistory: true)
     let result = try await perform(query: gqlQuery)
     let pageInfo = PageInfo(from: result?.tokens.pageInfo)
     return (
