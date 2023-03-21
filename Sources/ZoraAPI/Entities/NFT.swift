@@ -88,7 +88,9 @@ public struct NFT: Codable, Identifiable, Hashable {
   public var tokenUrlMimeType: String?
   public var image: Image?
   public var attributes: [Attribute]?
-    public var price: String?
+  public var price: String?
+  public var mintDate: Date?
+  public var endDate: Date?
   
   public init(from tokenData: TokenQuery.Data.Token.Token) {
     self.tokenId = tokenData.tokenId
@@ -139,7 +141,9 @@ public struct NFT: Codable, Identifiable, Hashable {
       
       self.image = Image(from: tokenNodeData.image)
     
-        self.price = marketSummaryNode?.price?.chainTokenPrice?.raw
+      self.price = marketSummaryNode?.price?.chainTokenPrice?.raw
+      self.mintDate = tokenNodeData.mintInfo?.mintContext.blockTimestamp
+      self.endDate = marketSummaryNode?.transactionInfo.blockTimestamp
       
     }
   
