@@ -89,8 +89,8 @@ public struct NFT: Codable, Identifiable, Hashable {
   public var image: Image?
   public var attributes: [Attribute]?
   public var price: String?
-  public var mintDate: Date?
-  public var endDate: Date?
+  public var mintDate: String?
+  public var endDate: String?
   
   public init(from tokenData: TokenQuery.Data.Token.Token) {
     self.tokenId = tokenData.tokenId
