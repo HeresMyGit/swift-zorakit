@@ -54,7 +54,7 @@ public class ZoraAPI {
     let pageInfo = PageInfo(from: result?.tokens.pageInfo)
     return (
       pageInfo,
-      result?.tokens.nodes.map { \NFT(from: $0.token, marketSummaryNode: $0.marketsSummary.first) }
+      result?.tokens.nodes.map { NFT(from: $0.token, marketSummaryNode: $0.marketsSummary.first) }
     )
   }
   
