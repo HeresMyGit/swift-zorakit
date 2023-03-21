@@ -88,6 +88,7 @@ public struct NFT: Codable, Identifiable, Hashable {
   public var tokenUrlMimeType: String?
   public var image: Image?
   public var attributes: [Attribute]?
+    public var price: String?
   
   public init(from tokenData: TokenQuery.Data.Token.Token) {
     self.tokenId = tokenData.tokenId
@@ -121,6 +122,26 @@ public struct NFT: Codable, Identifiable, Hashable {
     self.image = Image(from: tokenNodeData.image)
     
   }
+    
+    public init(from tokenNodeData: TokensQuery.Data.Token.Node.Token,
+                marketSummaryNode: TokensQuery.Data.Token.Node.MarketsSummary) {
+      self.tokenId = tokenNodeData.tokenId
+      self.collectionAddress = tokenNodeData.collectionAddress
+      //FIXME: For some reason, collectionName doesn't come back even though you can get it.
+      self.owner = tokenNodeData.owner
+      self.name = tokenNodeData.name
+      self.description = tokenNodeData.description
+  //    self.metadata = tokenNodeData.metadata
+      self.tokenUrl = tokenNodeData.tokenUrl
+      self.tokenUrlMimeType = tokenNodeData.tokenUrlMimeType
+      
+      self.attributes = tokenNodeData.attributes?.compactMap { Attribute(from: $0)}
+      
+      self.image = Image(from: tokenNodeData.image)
+    
+        self.price = marketSummaryNode.price?.chainTokenPrice?.raw
+      
+    }
   
   public func printData() {
     let encoder = JSONEncoder()
