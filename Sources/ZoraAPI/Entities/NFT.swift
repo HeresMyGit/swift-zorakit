@@ -124,7 +124,7 @@ public struct NFT: Codable, Identifiable, Hashable {
   }
     
     public init(from tokenNodeData: TokensQuery.Data.Token.Node.Token,
-                marketSummaryNode: TokensQuery.Data.Token.Node.MarketsSummary) {
+                marketSummaryNode: TokensQuery.Data.Token.Node.MarketsSummary?) {
       self.tokenId = tokenNodeData.tokenId
       self.collectionAddress = tokenNodeData.collectionAddress
       //FIXME: For some reason, collectionName doesn't come back even though you can get it.
@@ -139,7 +139,7 @@ public struct NFT: Codable, Identifiable, Hashable {
       
       self.image = Image(from: tokenNodeData.image)
     
-        self.price = marketSummaryNode.price?.chainTokenPrice?.raw
+        self.price = marketSummaryNode?.price?.chainTokenPrice?.raw
       
     }
   
