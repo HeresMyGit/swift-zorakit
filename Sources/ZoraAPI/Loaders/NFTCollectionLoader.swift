@@ -12,13 +12,15 @@ import Foundation
 @MainActor
 public class NFTCollectionLoader: ObservableObject {
   private var query: ZoraAPI.NFTTokensInput
-  private var perPage: Int = 4
+  private var perPage: Int = 20
   @Published public var tokens: [NFT] = []
   @Published public var nextPageInfo: PageInfo = PageInfo()
   @Published public var isLoading: Bool = false
+  @Published public var removeFirst: Bool = false // Remove first mfer, edge case for mfbldr app
   
-  public init(_ query: ZoraAPI.NFTTokensInput) {
+    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false) {
     self.query = query
+    self.removeFirst = removeFirst
     Task(priority: .userInitiated) {
       await load()
     }
@@ -30,6 +32,9 @@ public class NFTCollectionLoader: ObservableObject {
       let (pageInfo, tokens) = try await ZoraAPI.shared.tokens(query, page: .init(limit: perPage))
       self.nextPageInfo = pageInfo
       self.tokens = tokens ?? []
+      if removeFirst, !self.tokens.isEmpty {
+          self.tokens.remove(at: 0)
+      }
       isLoading = false
     } catch {
       // Errors...
