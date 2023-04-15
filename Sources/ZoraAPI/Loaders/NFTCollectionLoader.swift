@@ -18,9 +18,10 @@ public class NFTCollectionLoader: ObservableObject {
   @Published public var isLoading: Bool = false
   @Published public var removeFirst: Bool = false // Remove first mfer, edge case for mfbldr app
   
-    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false) {
+    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false, perPage: Int? = nil) {
     self.query = query
     self.removeFirst = removeFirst
+    self.perPage = perPage ?? self.perPage
     Task(priority: .userInitiated) {
       await load()
     }
