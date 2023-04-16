@@ -20,11 +20,12 @@ public class NFTCollectionLoader: ObservableObject {
   @Published public var sort: TokenSortKey = .minted
   @Published public var showSales: Bool = false
   
-    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false, perPage: Int? = nil, sort: TokenSortKey = .minted) {
+    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false, perPage: Int? = nil, sort: TokenSortKey = .minted, showSales: Bool = false) {
     self.query = query
     self.removeFirst = removeFirst
     self.perPage = perPage ?? self.perPage
     self.sort = sort
+    self.showSales = showSales
     Task(priority: .userInitiated) {
       await load()
     }
