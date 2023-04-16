@@ -146,6 +146,28 @@ public struct NFT: Codable, Identifiable, Hashable {
       self.endDate = marketSummaryNode?.transactionInfo.blockTimestamp
       
     }
+    
+    public init(from tokenNodeData: TokensQuery.Data.Token.Node.Token,
+                salesData: TokensQuery.Data.Token.Node.Sale?) {
+      self.tokenId = tokenNodeData.tokenId
+      self.collectionAddress = tokenNodeData.collectionAddress
+      //FIXME: For some reason, collectionName doesn't come back even though you can get it.
+      self.owner = tokenNodeData.owner
+      self.name = tokenNodeData.name
+      self.description = tokenNodeData.description
+  //    self.metadata = tokenNodeData.metadata
+      self.tokenUrl = tokenNodeData.tokenUrl
+      self.tokenUrlMimeType = tokenNodeData.tokenUrlMimeType
+      
+      self.attributes = tokenNodeData.attributes?.compactMap { Attribute(from: $0)}
+      
+      self.image = Image(from: tokenNodeData.image)
+    
+      self.price = salesData?.price.chainTokenPrice?.raw
+        self.mintDate = salesData?.transactionInfo.blockTimestamp
+      self.endDate = salesData?.transactionInfo.blockTimestamp
+      
+    }
   
   public func printData() {
     let encoder = JSONEncoder()

@@ -48,14 +48,21 @@ public class ZoraAPI {
   }
   
   
-  public func tokens(query: TokensQueryInput?, page: PaginationInput = .init(limit: 10)) async throws -> (PageInfo, [NFT]?) {
-    let gqlQuery = TokensQuery(networks: [network], where: query, pagination: page, sort: .init(sortKey: .minted, sortDirection: .desc), includeFullDetails: true, includeSalesHistory: true)
+    public func tokens(query: TokensQueryInput?, page: PaginationInput = .init(limit: 10), sort: TokenSortKey = .minted, showSales: Bool = false) async throws -> (PageInfo, [NFT]?) {
+    let gqlQuery = TokensQuery(networks: [network], where: query, pagination: page, sort: .init(sortKey: sort, sortDirection: .desc), includeFullDetails: true, includeSalesHistory: showSales)
     let result = try await perform(query: gqlQuery)
     let pageInfo = PageInfo(from: result?.tokens.pageInfo)
-    return (
-      pageInfo,
-      result?.tokens.nodes.map { NFT(from: $0.token, marketSummaryNode: $0.marketsSummary.first) }
-    )
+        if showSales {
+            return (
+              pageInfo,
+              result?.tokens.nodes.map { NFT(from: $0.token, salesData: $0.sales?.first) }
+            )
+        } else {
+            return (
+              pageInfo,
+              result?.tokens.nodes.map { NFT(from: $0.token, marketSummaryNode: $0.marketsSummary.first) }
+            )
+        }
   }
   
   public func tokens(_ input: NFTTokensInput, page: PaginationInput = .init(limit: 10)) async throws -> (PageInfo, [NFT]?) {
