@@ -17,11 +17,14 @@ public class NFTCollectionLoader: ObservableObject {
   @Published public var nextPageInfo: PageInfo = PageInfo()
   @Published public var isLoading: Bool = false
   @Published public var removeFirst: Bool = false // Remove first mfer, edge case for mfbldr app
+  @Published public var sort: TokenSortKey = .minted
+  @Published public var showSales: Bool = false
   
-    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false, perPage: Int? = nil) {
+    public init(_ query: ZoraAPI.NFTTokensInput, removeFirst: Bool = false, perPage: Int? = nil, sort: TokenSortKey = .minted) {
     self.query = query
     self.removeFirst = removeFirst
     self.perPage = perPage ?? self.perPage
+    self.sort = sort
     Task(priority: .userInitiated) {
       await load()
     }
@@ -30,7 +33,7 @@ public class NFTCollectionLoader: ObservableObject {
   public func load() async {
     do {
       isLoading = true
-      let (pageInfo, tokens) = try await ZoraAPI.shared.tokens(query, page: .init(limit: perPage))
+      let (pageInfo, tokens) = try await ZoraAPI.shared.tokens(query, page: .init(limit: perPage), sort: sort, showSales: showSales)
       self.nextPageInfo = pageInfo
       self.tokens = tokens ?? []
       if removeFirst, !self.tokens.isEmpty {
@@ -48,7 +51,7 @@ public class NFTCollectionLoader: ObservableObject {
   public func loadNextPage() async {
     do {
       isLoading = true
-      let (pageInfo, tokens) = try await ZoraAPI.shared.tokens(query, page: .init(limit: perPage, after: nextPageInfo.endCursor))
+        let (pageInfo, tokens) = try await ZoraAPI.shared.tokens(query, page: .init(limit: perPage, after: nextPageInfo.endCursor), sort: sort, showSales: showSales)
       self.nextPageInfo = pageInfo
       self.tokens.append(contentsOf: tokens ?? [])
       isLoading = false

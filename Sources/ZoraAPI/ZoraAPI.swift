@@ -65,12 +65,12 @@ public class ZoraAPI {
         }
   }
   
-  public func tokens(_ input: NFTTokensInput, page: PaginationInput = .init(limit: 10)) async throws -> (PageInfo, [NFT]?) {
+    public func tokens(_ input: NFTTokensInput, page: PaginationInput = .init(limit: 10), sort: TokenSortKey, showSales: Bool) async throws -> (PageInfo, [NFT]?) {
     switch input {
       case .collectionAddress(let collectionAddress):
         return try await tokens(query: .init(collectionAddresses: [collectionAddress]), page: page)
       case .collection(let collection):
-        return try await tokens(query: .init(collectionAddresses: [collection.address]), page: page)
+        return try await tokens(query: .init(collectionAddresses: [collection.address]), page: page, sort: sort, showSales: showSales)
       case .owner(let ownerAddress):
         return try await tokens(query: .init(ownerAddresses: [ownerAddress]), page: page)
     }
