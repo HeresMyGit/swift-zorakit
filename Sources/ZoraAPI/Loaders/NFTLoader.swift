@@ -23,7 +23,7 @@ public class NFTLoader: ObservableObject {
     }
   }
   
-  func load() async {
+  public func load() async {
     do {
       token = try await ZoraAPI.shared.token(address: address, id: id)
     } catch {
