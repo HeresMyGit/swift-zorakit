@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 public class NFTLoader: ObservableObject {
   private var address: String
-  private var id: String
+  public var id: String
   
   @Published public var token: NFT?
   
