@@ -12,7 +12,7 @@ import Foundation
 @MainActor
 public class NFTCollectionLoader: ObservableObject {
   private var query: ZoraAPI.NFTTokensInput
-  private var perPage: Int = 20
+  private var perPage: Int = 10
   @Published public var tokens: [NFT] = []
   @Published public var nextPageInfo: PageInfo = PageInfo()
   @Published public var isLoading: Bool = false
